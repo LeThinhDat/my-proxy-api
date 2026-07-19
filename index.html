@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách API</title>
+    <!-- Thư viện CSS Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f4f6f8; }
+        .api-card { margin-bottom: 20px; border: 1px solid #e0e0e0; border-radius: 4px; }
+        .card-header { background-color: #fff; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;}
+        .card-body { background-color: #fff; padding: 20px; }
+        .method-badge { background-color: #00a8e8; color: white; font-weight: bold; border: none;}
+        .alert-custom { background-color: #dcf4f9; border: 1px solid #bce8f1; color: #31708f; padding: 10px 15px; border-radius: 4px; margin-bottom: 15px;}
+        .api-url { background-color: #fff !important; color: #333;}
+    </style>
+</head>
+<body>
+    <div class="container mt-5" style="max-width: 900px;">
+        
+        <!-- Vòng lặp in ra các API từ Flask -->
+        {% for api in apis %}
+        <div class="api-card">
+            <div class="card-header">
+                <h5 class="mb-0 fs-5"><i class="bi bi-plugin me-2 text-dark"></i><strong>{{ api.path }}</strong></h5>
+                <div>
+                    <a href="{{ api.url }}" target="_blank" class="btn btn-outline-success btn-sm me-2">Mở</a>
+                    <button class="btn btn-outline-primary btn-sm">Test</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert-custom">
+                    <i class="bi bi-info-circle-fill me-2"></i>{{ api.desc }}
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text method-badge">GET</span>
+                    <input type="text" class="form-control api-url" value="{{ api.url }}" id="url-{{ loop.index }}" readonly>
+                    <button class="btn btn-outline-secondary copy-btn" type="button" data-target="url-{{ loop.index }}">Copy</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- Script xử lý nút Copy -->
+    <script>
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Lấy ID của ô input tương ứng
+                const targetId = this.getAttribute('data-target');
+                const inputField = document.getElementById(targetId);
+                
+                // Thực hiện copy vào clipboard
+                navigator.clipboard.writeText(inputField.value).then(() => {
+                    // Đổi chữ "Copy" thành "Copied!" để báo hiệu thành công
+                    const originalText = this.innerText;
+                    this.innerText = 'Copied!';
+                    this.classList.replace('btn-outline-secondary', 'btn-success');
+                    
+                    // Trả lại trạng thái cũ sau 1.5 giây
+                    setTimeout(() => {
+                        this.innerText = originalText;
+                        this.classList.replace('btn-success', 'btn-outline-secondary');
+                    }, 1500);
+                }).catch(err => {
+                    alert('Không thể copy: ', err);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
