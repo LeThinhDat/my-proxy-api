@@ -11,7 +11,17 @@ API_KEYS = [
     "dungkon_nhh59", 
     "dungkon_ltjqia", 
     "dungkon_6xbidn", 
-    "dungkon_bd9r4d", 
+    "dungkon_bd9r4d",
+    "dungkon_spsal5", 
+    "dungkon_d1jebi", 
+    "dungkon_2kd0op", 
+    "dungkon_wizjy",
+    "dungkon_j5ysp", 
+    "dungkon_skvhi3", 
+    "dungkon_f3ii8e", 
+    "dungkon_4z4rj", 
+    "dungkon_ugz56", 
+    "dungkon_u2z1lm", 
     "dungkon_j5rtj8"
 ]
 
@@ -26,6 +36,9 @@ def index():
         {"path": "/api/images/du", "desc": "ảnh vú", "url": f"{host}api/images/du"},
         {"path": "/api/images/bopvu", "desc": "bóp vú", "url": f"{host}api/images/bopvu"},
         {"path": "/api/images/dit", "desc": "ảnh địt", "url": f"{host}api/images/dit"},
+        {"path": "/api/images/bucu", "desc": "bú cu", "url": f"{host}api/images/bucu"},
+        {"path": "/api/images/bopmong", "desc": "bóp mông", "url": f"{host}api/images/bopmong"},
+        {"path": "/api/images/lon", "desc": "ảnh lồn", "url": f"{host}api/images/lon"},
         {"path": "/api/images/lon", "desc": "ảnh lồn", "url": f"{host}api/images/lon"}
     ]
     return render_template('index.html', apis=api_list)
@@ -54,7 +67,7 @@ def proxy_image(endpoint):
             
             # TRƯỜNG HỢP 2: API gốc vẫn trả về mã 200 nhưng nội dung JSON báo lỗi hết lượt
             # (Bạn cần điều chỉnh chữ "error" hoặc "limit" tùy theo cách API dungkon báo lỗi)
-            if "error" in data or data.get("status") == "false" or "limit" in str(data).lower():
+            if data.get("error") == "Đã vượt quá giới hạn sử dụng API Key.":
                 print(f"Key {current_key} đã hết hạn mức. Chuyển key...")
                 current_key_index = (current_key_index + 1) % len(API_KEYS)
                 continue
